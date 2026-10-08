@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>OMMA · Lanzamiento</title>
+<style>
+@font-face { font-family: "Cormorant Garamond"; font-style: normal; font-weight: 300 700; src: url(../fonts/cormorant.woff2) format("woff2"); }
+@font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 300 700; src: url(../fonts/cormorant-italic.woff2) format("woff2"); }
+@font-face { font-family: "Jost"; font-style: normal; font-weight: 100 900; src: url(../fonts/jost.woff2) format("woff2"); }
+@font-face { font-family: "Pinyon Script"; font-style: normal; font-weight: 400; src: url(../fonts/pinyon.woff2) format("woff2"); }
+
+:root {
+  --brand-crema: #efe6d8; --brand-marfil: #f6f0e4; --brand-vainilla: #d7bda6; --brand-almendra: #b7957f;
+  --brand-caramelo: #ab7743; --brand-cafe: #6d3914; --brand-espresso: #4c2b08; --brand-tinta: #3a2a18;
+  --caramelo-profundo: #8c5a2b; --topo: #6f5a44; --arena-oscura: #b79a79; --filete: #e0d3bf;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-sans: Jost, "Century Gothic", Arial, sans-serif;
+  --font-script: "Pinyon Script", cursive;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #000; }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--brand-crema); }
+.scene { position: absolute; inset: 0; overflow: hidden; }
+.cam { position: absolute; inset: 0; transform-origin: 50% 48%; }
+
+/* Fondos (texturas del manual) */
+.bg-crema { background-color: var(--brand-crema); }
+.bg-lineas { background-color: var(--brand-crema); background-image: repeating-linear-gradient(90deg, rgba(76,43,8,.05) 0 1px, transparent 1px 7px); }
+.bg-vainilla { background-color: var(--brand-vainilla); }
+.bg-grano { background-color: var(--brand-vainilla); background-image: radial-gradient(rgba(76,43,8,.12) 1.2px, transparent 1.6px); background-size: 11px 11px; }
+.bg-almendra { background-color: var(--brand-almendra); }
+.bg-espresso { background-color: var(--brand-espresso); }
+
+/* Tipografía */
+.label { font-family: var(--font-sans); font-weight: 500; font-size: 24px; letter-spacing: .3em; text-transform: uppercase; }
+.display { font-family: var(--font-display); font-weight: 600; line-height: 1.02; }
+.italic { font-family: var(--font-display); font-style: italic; font-weight: 400; }
+.line { overflow: hidden; padding: .04em 0 .14em; margin-bottom: -.14em; }
+.line > span { display: inline-block; will-change: transform; }
+.abs { position: absolute; }
+.center { left: 0; right: 0; text-align: center; }
+
+/* Elementos de interfaz editorial */
+#chrome { position: absolute; inset: 0; pointer-events: none; }
+#chrome .brand { position: absolute; top: 300px; left: 96px; font-family: var(--font-display); font-weight: 500; font-size: 30px; letter-spacing: .14em; }
+#chrome .count { position: absolute; top: 309px; right: 96px; font-family: var(--font-sans); font-weight: 400; font-size: 20px; letter-spacing: .3em; }
+#chrome .track { position: absolute; left: 96px; right: 96px; top: 1580px; height: 2px; opacity: .25; }
+#chrome .fill { position: absolute; left: 96px; top: 1580px; height: 2px; }
+#grain { position: absolute; inset: 0; width: 1080px; height: 1920px; mix-blend-mode: soft-light; opacity: .28; pointer-events: none; }
+#vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 70% at 50% 48%, transparent 55%, rgba(58,42,24,.18) 100%); }
+svg { overflow: visible; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 1 · EL ORIGEN — el hilo -->
+  <section class="scene" id="s1">
+    <div class="cam bg-lineas">
+      <svg class="abs" width="1080" height="1920" viewBox="0 0 1080 1920" style="left:0;top:0">
+        <defs>
+          <mask id="m-thread" maskUnits="userSpaceOnUse" x="-200" y="-200" width="1480" height="2320">
+            <path id="thread-mask" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"/>
+          </mask>
+        </defs>
+        <path id="thread" fill="none" stroke="#ab7743" stroke-width="5" stroke-linecap="round" stroke-dasharray="26 16" mask="url(#m-thread)"
+              d="M 1240 300 C 900 300 520 360 470 520 C 420 680 900 620 950 860 C 1000 1100 860 1320 560 1390 C 300 1450 130 1560 150 2100"/>
+        <g id="needle" fill="none" stroke="#4c2b08" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M -150 0 L 0 0"/>
+          <ellipse cx="-128" cy="0" rx="12" ry="5"/>
+          <path d="M 0 0 L 22 0" stroke-width="3"/>
+        </g>
+      </svg>
+      <div class="abs label" style="left:140px;top:745px;color:var(--caramelo-profundo)" data-fade="0.9 4.4">El origen</div>
+      <div class="abs display" style="left:132px;top:800px;font-size:138px;color:var(--brand-espresso)">
+        <div class="line" data-in="1.1" data-out="4.5"><span>Cada pieza</span></div>
+        <div class="line" data-in="1.35" data-out="4.55"><span>empieza</span></div>
+        <div class="line" data-in="1.6" data-out="4.6"><span class="italic" style="color:var(--brand-cafe)">con un hilo.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · EL OFICIO — hecho a mano -->
+  <section class="scene" id="s2">
+    <div class="cam bg-espresso">
+      <svg class="abs" id="icon-needle" width="340" height="340" viewBox="0 0 100 100" style="left:370px;top:440px"
+           fill="none" stroke="#d7bda6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path data-draw="5.5 1.4" d="M22 78 L70 30"/>
+        <ellipse data-draw="6.1 1.0" cx="74" cy="26" rx="8" ry="12" transform="rotate(45 74 26)"/>
+        <path data-draw="6.5 1.5" d="M18 82 C 10 90 30 92 40 86 C 52 79 60 88 72 84"/>
+      </svg>
+      <div class="abs label center" style="top:850px;color:var(--arena-oscura)" data-fade="5.8 9.0">El oficio</div>
+      <div class="abs center display" style="top:910px;font-size:112px;color:var(--brand-marfil)">
+        <div class="line" data-in="6.0" data-out="9.1"><span>Cortado y cosido</span></div>
+      </div>
+      <div class="abs center" style="top:1015px;font-size:190px;line-height:1;color:var(--brand-vainilla)">
+        <div class="line" data-in="6.35" data-out="9.15"><span class="italic">a mano.</span></div>
+      </div>
+      <div class="abs label center" style="top:1330px;color:var(--arena-oscura)" data-fade="7.2 9.0">Pieza por pieza</div>
+    </div>
+  </section>
+
+  <!-- 3 · EL DISEÑO — patronaje de alta costura -->
+  <section class="scene" id="s3">
+    <div class="cam bg-crema">
+      <svg class="abs" width="600" height="760" viewBox="0 0 600 900" style="left:240px;top:370px" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <!-- molde: línea de corte punteada -->
+        <path data-draw="10.0 2.2" stroke="#ab7743" stroke-width="2.5" stroke-dasharray="14 10"
+              d="M 205 50 L 395 50 L 392 205 C 405 300 400 360 380 400 C 430 560 500 720 540 880 L 60 880 C 100 720 170 560 220 400 C 200 360 195 300 208 205 Z"/>
+        <!-- vestido -->
+        <g stroke="#4c2b08" stroke-width="4">
+          <path data-draw="10.4 0.6" d="M 232 80 L 252 230"/>
+          <path data-draw="10.4 0.6" d="M 368 80 L 348 230"/>
+          <path data-draw="10.8 0.7" d="M 252 230 C 272 262 328 262 348 230"/>
+          <path data-draw="11.0 0.8" d="M 252 230 C 236 300 240 360 256 410"/>
+          <path data-draw="11.0 0.8" d="M 348 230 C 364 300 360 360 344 410"/>
+          <path data-draw="11.6 0.6" d="M 256 410 C 285 426 315 426 344 410"/>
+          <path data-draw="11.9 1.1" d="M 256 410 C 210 560 150 720 112 850"/>
+          <path data-draw="11.9 1.1" d="M 344 410 C 390 560 450 720 488 850"/>
+          <path data-draw="12.7 0.9" d="M 112 850 C 230 892 370 892 488 850"/>
+        </g>
+        <g stroke="#4c2b08" stroke-width="2" opacity=".55">
+          <path data-draw="12.4 1.0" d="M 285 428 C 268 600 236 740 222 872"/>
+          <path data-draw="12.5 1.0" d="M 315 428 C 334 600 368 740 380 872"/>
+          <path data-draw="12.6 1.0" d="M 300 430 C 300 600 300 740 300 880"/>
+        </g>
+        <!-- hilo de grano y cota de cintura -->
+        <g stroke="#ab7743" stroke-width="2.5">
+          <path data-draw="12.9 0.8" d="M 300 520 L 300 760 M 288 536 L 300 520 L 312 536 M 288 744 L 300 760 L 312 744"/>
+          <path data-draw="13.1 0.7" d="M 150 418 L 450 418 M 150 404 L 150 432 M 450 404 L 450 432"/>
+        </g>
+        <!-- piquetes -->
+        <g stroke="#ab7743" stroke-width="3">
+          <path data-draw="13.0 0.3" d="M 220 400 L 236 392"/>
+          <path data-draw="13.0 0.3" d="M 380 400 L 364 392"/>
+        </g>
+      </svg>
+      <div class="abs label" style="left:170px;top:768px;font-size:18px;color:var(--caramelo-profundo)" data-fade="13.3 15.0">Cintura</div>
+      <div class="abs label" style="left:800px;top:700px;font-size:18px;color:var(--caramelo-profundo);transform:rotate(90deg);transform-origin:left top" data-fade="13.4 15.0">Hilo de la tela</div>
+      <div class="abs label center" style="top:1170px;color:var(--caramelo-profundo)" data-fade="11.2 15.0">El diseño</div>
+      <div class="abs center display" style="top:1220px;font-size:86px;font-weight:500;color:var(--brand-espresso)">
+        <div class="line" data-in="11.5" data-out="15.05"><span>Con alma de</span></div>
+      </div>
+      <div class="abs center display" style="top:1310px;font-size:150px;color:var(--brand-espresso)">
+        <div class="line" data-in="11.8" data-out="15.1"><span>alta <span class="italic" style="font-weight:500">costura.</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · EL PROCESO — cortes rápidos -->
+  <section class="scene word" id="s4a" data-cut="15.4">
+    <div class="cam bg-crema"><div class="abs center italic idx" style="top:720px;font-size:80px;color:var(--brand-caramelo)">01</div>
+      <div class="abs center display" style="top:820px;font-size:230px;color:var(--brand-espresso)"><div class="line" data-in="15.45" data-dur="0.7"><span>Diseño.</span></div></div></div>
+  </section>
+  <section class="scene word" id="s4b" data-cut="16.5">
+    <div class="cam bg-vainilla"><div class="abs center italic idx" style="top:720px;font-size:80px;color:var(--brand-cafe)">02</div>
+      <div class="abs center display" style="top:820px;font-size:230px;color:var(--brand-espresso)"><div class="line" data-in="16.55" data-dur="0.7"><span>Corte.</span></div></div></div>
+  </section>
+  <section class="scene word" id="s4c" data-cut="17.6">
+    <div class="cam bg-almendra"><div class="abs center italic idx" style="top:720px;font-size:80px;color:var(--brand-espresso)">03</div>
+      <div class="abs center display" style="top:820px;font-size:230px;color:var(--brand-espresso)"><div class="line" data-in="17.65" data-dur="0.7"><span>Costura.</span></div></div></div>
+  </section>
+  <section class="scene word" id="s4d" data-cut="18.7">
+    <div class="cam bg-espresso"><div class="abs center italic idx" style="top:720px;font-size:80px;color:var(--brand-vainilla)">04</div>
+      <div class="abs center display" style="top:820px;font-size:230px;color:var(--brand-marfil)"><div class="line" data-in="18.75" data-dur="0.7" data-out="20.0"><span>Detalle.</span></div></div>
+      <div class="abs label center" style="top:1150px;color:var(--arena-oscura)" data-fade="19.2 20.0">Nada en serie</div></div>
+  </section>
+
+  <!-- 5 · PARA TI -->
+  <section class="scene" id="s5">
+    <div class="cam bg-grano">
+      <div class="abs label center" style="top:740px;color:var(--brand-espresso)" data-fade="21.0 25.3">Moda femenina hecha a mano</div>
+      <div class="abs center" id="script" style="top:800px;font-family:var(--font-script);font-size:200px;line-height:1.2;color:var(--brand-cafe)">Hecho para ti</div>
+      <div class="abs" id="rule5" style="left:540px;top:1110px;height:2px;background:var(--brand-cafe)"></div>
+      <div class="abs center italic" style="top:1150px;font-size:58px;color:var(--brand-tinta)">
+        <div class="line" data-in="22.8" data-out="25.3"><span>Desde Montería, a toda Colombia.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · OMMA -->
+  <section class="scene" id="s6">
+    <div class="cam bg-espresso">
+      <svg class="abs" id="ring" width="1080" height="1920" viewBox="0 0 1080 1920" style="left:0;top:0">
+        <circle id="ring-c" cx="540" cy="900" r="230" fill="none" stroke="#d7bda6" stroke-width="2.5" transform="rotate(-90 540 900)"/>
+      </svg>
+      <div class="abs center" id="word" style="top:812px;font-family:var(--font-display);font-weight:500;font-size:170px;line-height:1;color:var(--brand-marfil)">OMMA</div>
+      <div class="abs" id="rule6" style="left:540px;top:1030px;height:2px;background:var(--brand-vainilla)"></div>
+      <div class="abs label center" style="top:1066px;font-size:28px;letter-spacing:.34em;color:var(--brand-vainilla)" data-fade="28.9 99">Viste tu esencia</div>
+      <div class="abs center" style="top:1370px;font-family:var(--font-sans);font-weight:300;font-size:36px;letter-spacing:.06em;color:var(--brand-marfil)" data-fade="29.8 99">@omma_oficial</div>
+      <div class="abs label center" style="top:1430px;font-size:20px;color:var(--arena-oscura)" data-fade="30.1 99">Montería · Envíos a toda Colombia</div>
+    </div>
+  </section>
+
+  <div id="vignette"></div>
+  <div id="chrome">
+    <div class="brand">OMMA</div>
+    <div class="count"><span id="count">01</span> / 05</div>
+    <div class="track"></div>
+    <div class="fill"></div>
+  </div>
+  <canvas id="grain" width="360" height="640"></canvas>
+</div>
+
+<script>
+const DURATION = 33, FPS = 30;
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const out4 = x => 1 - Math.pow(1 - x, 4);
+const out5 = x => 1 - Math.pow(1 - x, 5);
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const num = (v, d) => v === undefined ? d : parseFloat(v);
+
+// Escenas: [id, entrada, salida (ya cubierta)]
+const SCENES = { s1: [0, 5.6], s2: [4.6, 10.4], s3: [9.5, 15.4], s4a: [15.4, 16.5], s4b: [16.5, 17.6], s4c: [17.6, 18.7], s4d: [18.7, 21.0], s5: [19.9, 26.6], s6: [25.4, 99] };
+
+const thread = $('#thread'), threadMask = $('#thread-mask'), needle = $('#needle');
+threadMask.setAttribute('d', thread.getAttribute('d'));
+const TL = thread.getTotalLength();
+threadMask.style.strokeDasharray = TL;
+$$('[data-draw]').forEach(el => { const L = el.getTotalLength(); el.dataset.len = L; if (!el.getAttribute('stroke-dasharray')) el.style.strokeDasharray = L; });
+
+function drawPaths(t) {
+  for (const el of $$('[data-draw]')) {
+    const [a, d] = el.dataset.draw.split(' ').map(Number);
+    const e = inOut(prog(t, a, a + d)), L = +el.dataset.len;
+    if (el.getAttribute('stroke-dasharray')) {
+      el._e = e; // el punteado se revela con máscara en dashedDraw()
+    } else {
+      el.style.strokeDashoffset = (1 - e) * L;
+    }
+  }
+}
+
+function lines(t) {
+  for (const el of $$('.line')) {
+    const a = num(el.dataset.in, 0), d = num(el.dataset.dur, 1.1), o = num(el.dataset.out, 999);
+    const i = out5(prog(t, a, a + d)), x = inOut(prog(t, o, o + .6));
+    el.firstElementChild.style.transform = `translateY(${(1 - i) * 112 - x * 135}%)`;
+  }
+  for (const el of $$('[data-fade]')) {
+    const [a, o] = el.dataset.fade.split(' ').map(Number);
+    const i = out4(prog(t, a, a + 1.0)), x = inOut(prog(t, o, o + .5));
+    el.style.opacity = i * (1 - x);
+    el.style.transform = `${el.style.transform.replace(/translateY\([^)]*\)/, '')} translateY(${(1 - i) * 18 - x * 10}px)`.trim();
+  }
+}
+
+function scenes(t) {
+  for (const [id, [a, b]] of Object.entries(SCENES)) {
+    const el = document.getElementById(id);
+    const vis = t >= a && t < b;
+    el.style.display = vis ? 'block' : 'none';
+    if (!vis) continue;
+    const cam = el.firstElementChild;
+    const span = Math.min(b, DURATION) - a;
+    cam.style.transform = `scale(${1 + 0.05 * inOut(prog(t, a, a + span))})`;
+    let clip = 'none';
+    if (id === 's2') { const e = inOut(prog(t, 4.6, 5.5)); clip = `inset(${(1 - e) * 100}% 0 0 0)`; cam.style.transform += ` translateY(${(1 - e) * 140}px)`; }
+    if (id === 's3') { const e = inOut(prog(t, 9.5, 10.4)); clip = `inset(0 ${(1 - e) * 100}% 0 0)`; }
+    if (id === 's5') { const e = inOut(prog(t, 19.9, 21.0)); clip = `inset(0 0 ${(1 - e) * 100}% 0)`; }
+    if (id === 's6') { const e = inOut(prog(t, 25.4, 26.6)); clip = `circle(${e * 1150}px at 540px 900px)`; }
+    el.style.clipPath = clip;
+  }
+  // las escenas que se van se elevan levemente (parallax)
+  $('#s1 .cam').style.transform += ` translateY(${-inOut(prog(t, 4.6, 5.5)) * 160}px)`;
+  $('#s4d .cam').style.transform += ` translateY(${inOut(prog(t, 19.9, 21.0)) * 160}px)`;
+}
+
+function sceneOne(t) {
+  const e = inOut(prog(t, 0.2, 4.6));
+  threadMask.style.strokeDashoffset = TL * (1 - e);
+  const at = clamp(e * TL, 0.01, TL - 0.01);
+  const p = thread.getPointAtLength(at), q = thread.getPointAtLength(Math.min(TL, at + 2));
+  const ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
+  needle.setAttribute('transform', `translate(${p.x} ${p.y}) rotate(${ang})`);
+  needle.style.opacity = e > 0 && e < 1 ? 1 : 0;
+}
+
+function dashedDraw(t) {
+  // revela el molde punteado con una máscara que avanza
+  for (const el of $$('[data-draw][stroke-dasharray]')) {
+    const e = el._e ?? 0;
+    if (!el._mask) {
+      const svg = el.ownerSVGElement, id = 'mk' + Math.random().toString(36).slice(2);
+      const defs = svg.querySelector('defs') || svg.insertBefore(document.createElementNS(svg.namespaceURI, 'defs'), svg.firstChild);
+      const m = document.createElementNS(svg.namespaceURI, 'mask'); m.id = id; m.setAttribute('maskUnits', 'userSpaceOnUse');
+      m.setAttribute('x', -100); m.setAttribute('y', -100); m.setAttribute('width', 2000); m.setAttribute('height', 2000);
+      const mp = document.createElementNS(svg.namespaceURI, 'path');
+      mp.setAttribute('d', el.getAttribute('d')); mp.setAttribute('fill', 'none'); mp.setAttribute('stroke', '#fff'); mp.setAttribute('stroke-width', 14);
+      mp.style.strokeDasharray = el.dataset.len; m.appendChild(mp); defs.appendChild(m);
+      el.setAttribute('mask', `url(#${id})`); el._mask = mp;
+    }
+    el._mask.style.strokeDashoffset = (1 - e) * el.dataset.len;
+  }
+}
+
+function sceneFive(t) {
+  const e = inOut(prog(t, 21.3, 23.0));
+  const s = $('#script');
+  s.style.clipPath = `inset(-20% ${(1 - e) * 100}% -20% 0)`;
+  const x = inOut(prog(t, 25.0, 25.4));
+  s.style.opacity = 1 - x;
+  const r = $('#rule5'), w = 240 * inOut(prog(t, 22.6, 23.6));
+  r.style.width = w + 'px'; r.style.marginLeft = -w / 2 + 'px'; r.style.opacity = 1 - x;
+}
+
+function sceneSix(t) {
+  const c = $('#ring-c'), L = 2 * Math.PI * 230;
+  const d = inOut(prog(t, 26.0, 27.4));
+  c.style.strokeDasharray = L; c.style.strokeDashoffset = L * (1 - d);
+  const g = inOut(prog(t, 27.3, 29.0));
+  c.setAttribute('r', 230 + g * 260); c.style.opacity = 1 - g;
+  c.style.strokeDasharray = 2 * Math.PI * (230 + g * 260); c.style.strokeDashoffset = 2 * Math.PI * (230 + g * 260) * (1 - d);
+  const w = $('#word'), k = out4(prog(t, 27.0, 29.4));
+  const ls = 0.9 - 0.76 * k;
+  w.style.letterSpacing = ls + 'em'; w.style.paddingLeft = ls + 'em';
+  w.style.opacity = k; w.style.filter = `blur(${(1 - k) * 16}px)`;
+  const r = $('#rule6'), rw = 380 * inOut(prog(t, 28.4, 29.6));
+  r.style.width = rw + 'px'; r.style.marginLeft = -rw / 2 + 'px';
+}
+
+const DARK = [[0, 0], [5.05, 1], [9.95, 0], [18.7, 1], [20.45, 0]];
+function chrome(t) {
+  let dark = 0, n = 1;
+  for (const [a, v] of DARK) if (t >= a) dark = v;
+  for (const [a, v] of [[0, 1], [5.05, 2], [9.95, 3], [15.4, 4], [20.45, 5]]) if (t >= a) n = v;
+  const col = dark ? '#f6f0e4' : '#4c2b08';
+  const ch = $('#chrome');
+  ch.style.color = col;
+  ch.style.opacity = out4(prog(t, 0.3, 1.3)) * (1 - inOut(prog(t, 25.0, 25.6)));
+  $('#count').textContent = String(n).padStart(2, '0');
+  $('.track').style.background = col;
+  const f = $('.fill'); f.style.background = dark ? '#d7bda6' : '#8c5a2b';
+  f.style.width = (888 * clamp(t / 25.4)) + 'px';
+}
+
+// Grano de película determinista
+const gc = $('#grain'), gx = gc.getContext('2d'), gimg = gx.createImageData(360, 640);
+function grain(frame) {
+  let s = (frame * 9301 + 49297) % 233280 || 1;
+  const d = gimg.data;
+  for (let i = 0; i < d.length; i += 4) {
+    s = (s * 16807) % 2147483647;
+    const v = 128 + ((s & 255) - 128) * 0.9;
+    d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255;
+  }
+  gx.putImageData(gimg, 0, 0);
+}
+
+window.render = function (t) {
+  scenes(t); lines(t); drawPaths(t); dashedDraw(t);
+  sceneOne(t); sceneFive(t); sceneSix(t); chrome(t);
+  grain(Math.round(t * FPS));
+};
+window.DURATION = DURATION; window.FPS = FPS;
+window.ready = document.fonts.ready.then(() => { render(0); return true; });
+
+// Vista previa en navegador: reproduce en tiempo real salvo ?t=segundos
+const qs = new URLSearchParams(location.search);
+if (qs.has('t')) window.ready.then(() => render(parseFloat(qs.get('t'))));
+else if (qs.has('play')) window.ready.then(() => { const t0 = performance.now(); (function loop() { render(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); })(); });
+</script>
+</body>
+</html>
