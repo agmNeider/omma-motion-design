@@ -30,7 +30,12 @@ const stillsArg = args.includes('--stills') ? args[args.indexOf('--stills') + 1]
   const { DURATION, FPS } = await page.evaluate(() => ({ DURATION: window.DURATION, FPS: window.FPS }));
   const total = Math.round(DURATION * FPS);
   const outFile = path.join(__dirname, 'out', 'omma-lanzamiento-9x16.mp4');
-  const ff = spawn('ffmpeg', ['-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', '-',
+  // la música (tools/musica.py → out/musica.wav) se mezcla si existe, normalizada a -14 LUFS
+  const music = path.join(__dirname, 'out', 'musica.wav');
+  const audio = fs.existsSync(music)
+    ? ['-i', music, '-map', '0:v', '-map', '1:a', '-af', 'loudnorm=I=-14:TP=-1.5:LRA=11', '-ar', '48000', '-c:a', 'aac', '-b:a', '192k', '-shortest']
+    : [];
+  const ff = spawn('ffmpeg', ['-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', '-', ...audio,
     '-c:v', 'libx264', '-preset', 'slow', '-crf', '23', '-tune', 'grain', '-maxrate', '12M', '-bufsize', '24M', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', outFile],
     { stdio: ['pipe', 'ignore', 'inherit'] });
 

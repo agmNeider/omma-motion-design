@@ -6,11 +6,13 @@ Video de presentación de marca (Reels / Historias, 1080 × 1920, 30 fps, 40 s),
 - `render.cjs` — la renderiza cuadro a cuadro con Playwright y la codifica con ffmpeg.
 - `assets/originales/` — fotos de los bocetos de la marca.
 - `assets/bocetos/` — recortes de esos bocetos en duotono de marca (grafito → espresso, papel → crema), generados con `tools/bocetos.py`.
+- `tools/musica.py` — banda sonora original, sintetizada en código (genera `out/musica.wav`, que `render.cjs` mezcla en el video).
 - `fonts/` — tipografías de la marca (Google Fonts, licencia OFL).
 - `out/omma-lanzamiento-9x16.mp4` — el video.
 
 ```bash
 python3 tools/bocetos.py assets/originales/boceto-abrigos.jpg assets/originales/boceto-corse.jpg assets/bocetos
+python3 tools/musica.py out/musica.wav                       # música (antes del render)
 NODE_PATH=$(npm root -g) node render.cjs                    # video completo
 NODE_PATH=$(npm root -g) node render.cjs --stills 3,12,30  # fotogramas de revisión
 ```
@@ -41,4 +43,16 @@ El manual solo regula el movimiento web («nada de rebotes»). Para video se apl
 - Grano de película suave y viñeta cálida, sin negros ni grises.
 - Todo el contenido importante entre 300 y 1500 px de alto, lejos de la interfaz de Instagram.
 
-El video no lleva audio: se recomienda añadir en Instagram o en el editor una pieza instrumental lenta (piano o cuerdas, 70–90 BPM). Los cortes de 22–27 s caen cada 1,1 s para acompañar el pulso.
+## Música
+
+Pieza original para piano y colchón de cuerdas en re mayor, sintetizada con `tools/musica.py` (sin muestras ni licencias de terceros). Pulso de 1,1 s (54,5 BPM), el mismo de los cortes de palabras.
+
+| Tiempo | Música |
+|---|---|
+| 0–5 s | Colchón que se abre y notas sueltas de piano mientras la aguja cose. |
+| 5–22 s | Arpegio de piano en corcheas: Re maj9 → Si m11 → Sol maj7 → La sus, un acorde cada 4,4 s (cuatro tiempos). |
+| 22–27 s | Un golpe grave en cada corte de palabra y una subida de aire que acumula tensión. |
+| 27–32 s | Respiro en Si m9: solo colchón y notas largas para «Hecho para ti». |
+| 32–40 s | Resolución en Re mayor con golpe grave al abrirse la «O», destello agudo cuando el logotipo se asienta y desvanecido final. |
+
+Cada transición de escena lleva un aire suave. Mezcla normalizada a -14 LUFS, pico de -1,5 dBTP (el estándar de Instagram).
