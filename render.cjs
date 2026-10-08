@@ -31,7 +31,7 @@ const stillsArg = args.includes('--stills') ? args[args.indexOf('--stills') + 1]
   const total = Math.round(DURATION * FPS);
   const outFile = path.join(__dirname, 'out', 'omma-lanzamiento-9x16.mp4');
   const ff = spawn('ffmpeg', ['-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', '-',
-    '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', outFile],
+    '-c:v', 'libx264', '-preset', 'slow', '-crf', '23', '-tune', 'grain', '-maxrate', '12M', '-bufsize', '24M', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', outFile],
     { stdio: ['pipe', 'ignore', 'inherit'] });
 
   for (let i = 0; i < total; i++) {
