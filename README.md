@@ -1,58 +1,60 @@
 # OMMA · Motion design
 
-Video de presentación de marca (Reels / Historias, 1080 × 1920, 30 fps, 40 s), construido con el manual de marca de OMMA: paleta café, Cormorant Garamond + Jost + Pinyon Script, íconos de línea de trazo 5, texturas del sistema y los bocetos originales de la marca.
+Videos de presentación de marca para Reels e Historias (1080 × 1920, 30 fps, 40 s), construidos con el manual de marca de OMMA: paleta café, Cormorant Garamond + Jost, mucho aire y los bocetos originales de la marca.
 
-- `src/omma-lanzamiento.html` — la animación. Todo su estado depende del tiempo `t`, así cada cuadro es exacto. Ábrela con `?play` para verla en tiempo real o con `?t=12.5` para congelar un instante.
-- `render.cjs` — la renderiza cuadro a cuadro con Playwright y la codifica con ffmpeg.
-- `assets/originales/` — fotos de los bocetos de la marca.
-- `assets/bocetos/` — recortes de esos bocetos en duotono de marca (grafito → espresso, papel → crema), generados con `tools/bocetos.py`.
-- `tools/musica.py` — banda sonora original, sintetizada en código (genera `out/musica.wav`, que `render.cjs` mezcla en el video).
+| Video | Composición | Concepto |
+|---|---|---|
+| `out/omma-serie-9x16.mp4` | `src/omma-serie.html` | **Versión actual.** Serie fotográfica: un libro de fotos que se hojea despacio. |
+| `out/omma-lanzamiento-9x16.mp4` | `src/omma-lanzamiento.html` | Primera versión: motion gráfico con hilo, molde y cortes de palabras. |
+
+## Archivos
+
+- `src/*.html` — las animaciones. Todo su estado depende del tiempo `t`, así cada cuadro es exacto. Ábrelas con `?play` para verlas en tiempo real o con `?t=12.5` para congelar un instante.
+- `render.cjs` — las renderiza cuadro a cuadro con Playwright y las codifica con ffmpeg, mezclando la música normalizada a -14 LUFS.
+- `assets/fotos/originales/` — fotos CC0 de StockSnap; autores y licencia en `assets/fotos/CREDITOS.md`.
+- `assets/fotos/*.jpg` — las mismas fotos reveladas y recortadas para la serie (`tools/fotos.py`).
+- `assets/originales/` — fotos de los bocetos de la marca; `assets/bocetos/` sus recortes en duotono (`tools/bocetos.py`).
+- `tools/buscar_fotos.py` — busca fotos CC0 en Openverse y arma hojas de contacto para elegir.
+- `tools/musica.py` — banda sonora original sintetizada en código, sin licencias de terceros.
 - `fonts/` — tipografías de la marca (Google Fonts, licencia OFL).
-- `out/omma-lanzamiento-9x16.mp4` — el video.
 
 ```bash
-python3 tools/bocetos.py assets/originales/boceto-abrigos.jpg assets/originales/boceto-corse.jpg assets/bocetos
-python3 tools/musica.py out/musica.wav                       # música (antes del render)
-NODE_PATH=$(npm root -g) node render.cjs                    # video completo
+python3 tools/fotos.py assets/fotos/originales assets/originales assets/fotos
+python3 tools/musica.py out/musica-serie.wav
+NODE_PATH=$(npm root -g) node render.cjs                    # out/omma-serie-9x16.mp4
 NODE_PATH=$(npm root -g) node render.cjs --stills 3,12,30  # fotogramas de revisión
+# primera versión:
+NODE_PATH=$(npm root -g) node render.cjs --src src/omma-lanzamiento.html --out out/omma-lanzamiento-9x16.mp4 --audio out/musica.wav
 ```
 
-## Guion
+## Serie fotográfica (versión actual)
 
-| Tiempo | Capítulo | Fondo | Qué pasa |
-|---|---|---|---|
-| 0–5 s | El origen | Crema con líneas | Una aguja cose un hilo punteado caramelo a través del cuadro. «Cada pieza empieza *con un hilo.*» |
-| 5–12 s | El boceto | Crema (corte lateral) | El boceto del corsé con falda de pétalos se dibuja de arriba abajo: «Todo nace *a lápiz.*» Luego los dos abrigos de hombros estructurados y el traje con corsé: «*Diseño propio.*» · BOCETOS ORIGINALES |
-| 12–17 s | El oficio | Espresso (cortina hacia arriba) | Se dibuja el ícono *hecho a mano*. «Cortado y cosido *a mano.*» · PIEZA POR PIEZA |
-| 17–22 s | El diseño | Crema (corte lateral) | El corsé y la falda de pétalos pasan a molde: línea de corte punteada, costuras del corsé, cota de cintura y piquetes. «Con alma de alta *costura.*» |
-| 22–27 s | El proceso | Cortes secos crema → vainilla → almendra → espresso | Cada palabra con un detalle de los bocetos: Diseño (cuello y rostro) · Corte (hombro estructurado) · Costura (corsé) · Detalle (pétalos) · NADA EN SERIE |
-| 27–32 s | Para ti | Vainilla con grano | Script «Hecho para ti» escrito de izquierda a derecha. «Envíos a toda Colombia.» |
-| 32–40 s | Firma | Espresso (iris circular: la «O») | Se traza la O, el logotipo OMMA entra cerrando su espaciado hasta 0,14em, filete y VISTE TU ESENCIA. @omma_boutique |
+Cada página es una copia impresa con borde marfil sobre papel crema, con la sombra única de la marca. La foto se acerca muy despacio dentro de su marco, las páginas se funden con una breve pausa en crema entre una y otra, y los textos son pies de foto.
 
-## Reglas de movimiento usadas
+| Tiempo | Página | Pie de foto |
+|---|---|---|
+| 0–3 s | Portada sobre textura arena difuminada | OMMA · MODA FEMENINA HECHA A MANO |
+| 3–6,6 s | Espalda de encaje | ENCAJE |
+| 6,6–10 s | Mano sobre tul | *Cada detalle, a mano.* |
+| 10–14 s | Díptico: ganchos de madera y tijeras con carrete | EL TALLER |
+| 14–17 s | Boceto original de OMMA (corsé y falda de pétalos) | BOCETO ORIGINAL · *Todo nace a lápiz.* |
+| 17–21 s | Vestido blanco a toda página (sin textos) | — |
+| 21–24,6 s | Detalle de encajes de gala | *Con alma de alta costura.* |
+| 24,6–28 s | Díptico: boceto con alfileres y vestido strapless | PIEZA POR PIEZA |
+| 28–31,8 s | Vuelo de una falda de tul | *Algo hecho para ti.* |
+| 31,8–40 s | Cierre | OMMA · VISTE TU ESENCIA · @omma_boutique · HECHO A MANO · ENVÍOS A TODA COLOMBIA |
 
-El manual solo regula el movimiento web («nada de rebotes»). Para video se aplicó lo mismo con más amplitud:
+Todas las fotos llevan el mismo revelado (`tools/fotos.py`): algo desaturadas, teñidas hacia la paleta (sombras espresso, luces marfil), con negros levantados y grano suave, para que parezcan una sola sesión.
 
-- Curvas suaves (cúbica de entrada y salida, salida quíntica en textos). Ningún rebote, ningún elástico.
-- Textos que suben desde detrás de una línea (máscara), nunca que aparecen de golpe.
-- Bocetos que se revelan como si se estuvieran dibujando y suben despacio.
-- Acercamiento lento y continuo de cámara (5 % por escena).
-- Transiciones con forma de oficio: cortina de tela, corte de tijera, la «O» del monograma como iris.
-- Script una sola vez en todo el video; un único texto por pantalla; mucho aire; sin numeración.
-- Los bocetos van en duotono de la paleta para que el amarillo y el rojo del abrigo no salgan de los colores de marca.
-- Grano de película suave y viñeta cálida, sin negros ni grises.
-- Todo el contenido importante entre 300 y 1500 px de alto, lejos de la interfaz de Instagram.
+**Música:** piano solo y colchón suave en re mayor, 66,7 BPM, un acorde por página (Re maj9 → Si m11 → Sol maj7 → La add9 → Re/Fa# → Mi m9 → Sol maj7 → La sus → Si m9 → Re maj9), con un roce de papel casi inaudible al pasar cada página.
 
-## Música
+### Por qué así: tendencias consultadas
 
-Pieza original para piano y colchón de cuerdas en re mayor, sintetizada con `tools/musica.py` (sin muestras ni licencias de terceros). Pulso de 1,1 s (54,5 BPM), el mismo de los cortes de palabras.
+- **Lujo silencioso:** ritmo pausado, cada toma con tiempo para respirar, paletas marfil, piedra, topo y café, luz suave y composiciones limpias.
+- **Formato lookbook / libro de fotos:** secuencias de fotos fijas presentadas como una edición, más cercanas al carrusel (que en 2026 rinde mejor que el video en guardados y compartidos) que al reel de cortes rápidos.
+- **Campañas más cortas y centradas en el detalle:** dejar que la tela, el movimiento y los acabados se lean en pantalla de celular.
+- **Contracorriente deliberada:** la tendencia general de Reels son 8–15 cortes rápidos en 30 s; aquí se hace lo contrario a propósito, porque la calma es lo que comunica una marca premium.
 
-| Tiempo | Música |
-|---|---|
-| 0–5 s | Colchón que se abre y notas sueltas de piano mientras la aguja cose. |
-| 5–22 s | Arpegio de piano en corcheas: Re maj9 → Si m11 → Sol maj7 → La sus, un acorde cada 4,4 s (cuatro tiempos). |
-| 22–27 s | Un golpe grave en cada corte de palabra y una subida de aire que acumula tensión. |
-| 27–32 s | Respiro en Si m9: solo colchón y notas largas para «Hecho para ti». |
-| 32–40 s | Resolución en Re mayor con golpe grave al abrirse la «O», destello agudo cuando el logotipo se asienta y desvanecido final. |
+## Primera versión (motion gráfico)
 
-Cada transición de escena lleva un aire suave. Mezcla normalizada a -14 LUFS, pico de -1,5 dBTP (el estándar de Instagram).
+`src/omma-lanzamiento.html`: un hilo que cose el cuadro, los bocetos que se dibujan, el molde del corsé con falda de pétalos, cortes de palabras (Diseño · Corte · Costura · Detalle) y la firma con la «O» como iris. Su música (piano, cuerdas y golpes graves a 54,5 BPM) está en el historial de git de `tools/musica.py`.

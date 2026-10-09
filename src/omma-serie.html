@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>OMMA · Serie</title>
+<style>
+@font-face { font-family: "Cormorant Garamond"; font-style: normal; font-weight: 300 700; src: url(../fonts/cormorant.woff2) format("woff2"); }
+@font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 300 700; src: url(../fonts/cormorant-italic.woff2) format("woff2"); }
+@font-face { font-family: "Jost"; font-style: normal; font-weight: 100 900; src: url(../fonts/jost.woff2) format("woff2"); }
+
+:root {
+  --brand-crema: #efe6d8; --brand-marfil: #f6f0e4; --brand-vainilla: #d7bda6; --brand-cafe: #6d3914;
+  --brand-espresso: #4c2b08; --brand-tinta: #3a2a18; --caramelo-profundo: #8c5a2b; --topo: #6f5a44; --filete: #e0d3bf;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-sans: Jost, "Century Gothic", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #000; }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--brand-crema); }
+.page { position: absolute; inset: 0; background: var(--brand-crema); overflow: hidden; }
+
+/* Copia impresa: borde marfil, sombra de la marca, la foto se mueve despacio dentro */
+.print { position: absolute; left: 50%; background: var(--brand-marfil); padding: 16px; box-shadow: 0 10px 30px rgba(76,43,8,.10); }
+.print .ph { width: 100%; height: 100%; overflow: hidden; }
+.print img { display: block; width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 50%; }
+
+.cap { position: absolute; left: 0; right: 0; text-align: center; }
+.label { font-family: var(--font-sans); font-weight: 500; font-size: 22px; letter-spacing: .3em; text-transform: uppercase; color: var(--caramelo-profundo); }
+.italic { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 54px; line-height: 1.2; color: var(--brand-espresso); }
+.word { font-family: var(--font-display); font-weight: 500; letter-spacing: .14em; padding-left: .14em; color: var(--brand-espresso); line-height: 1; }
+
+#folio { position: absolute; inset: 0; pointer-events: none; color: var(--brand-espresso); }
+#folio .l { position: absolute; top: 300px; left: 96px; font-family: var(--font-display); font-weight: 500; font-size: 28px; letter-spacing: .14em; }
+#folio .r { position: absolute; top: 308px; right: 96px; font-family: var(--font-sans); font-size: 17px; letter-spacing: .3em; text-transform: uppercase; }
+#grain { position: absolute; inset: 0; width: 1080px; height: 1920px; mix-blend-mode: soft-light; opacity: .22; pointer-events: none; }
+#vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 85% 75% at 50% 48%, transparent 60%, rgba(58,42,24,.14) 100%); }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- Portada: textura arena difuminada -->
+  <section class="page" data-at="0">
+    <img id="title-bg" src="../assets/fotos/titulo.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85">
+    <div class="cap word" id="title-word" style="top:840px;font-size:150px">OMMA</div>
+    <div class="cap label" style="top:1030px;color:var(--brand-espresso)" data-fade="1.4">Moda femenina hecha a mano</div>
+  </section>
+
+  <section class="page" data-at="3.0">
+    <div class="print" style="top:640px;width:896px;height:608px;margin-left:-448px"><div class="ph"><img src="../assets/fotos/encaje.jpg"></div></div>
+    <div class="cap label" style="top:1310px" data-fade="4.0">Encaje</div>
+  </section>
+
+  <section class="page" data-at="6.6">
+    <div class="print" style="top:470px;width:632px;height:782px;margin-left:-316px"><div class="ph"><img src="../assets/fotos/mano.jpg"></div></div>
+    <div class="cap italic" style="top:1300px" data-fade="7.6">Cada detalle, a mano.</div>
+  </section>
+
+  <section class="page" data-at="10.2">
+    <div class="print" style="top:400px;width:792px;height:539px;margin-left:-396px"><div class="ph"><img src="../assets/fotos/ganchos.jpg"></div></div>
+    <div class="print" style="top:975px;width:792px;height:539px;margin-left:-396px" data-delay="0.5"><div class="ph"><img src="../assets/fotos/tijeras.jpg"></div></div>
+    <div class="cap label" style="top:1555px" data-fade="11.4">El taller</div>
+  </section>
+
+  <section class="page" data-at="13.8">
+    <div class="print" style="top:420px;width:632px;height:868px;margin-left:-316px"><div class="ph"><img src="../assets/fotos/boceto.jpg"></div></div>
+    <div class="cap label" style="top:1335px" data-fade="14.8">Boceto original</div>
+    <div class="cap italic" style="top:1380px" data-fade="15.2">Todo nace a lápiz.</div>
+  </section>
+
+  <section class="page" data-at="17.4">
+    <div class="print" style="top:250px;width:952px;height:1414px;margin-left:-476px;padding:14px"><div class="ph"><img src="../assets/fotos/vestido.jpg"></div></div>
+  </section>
+
+  <section class="page" data-at="21.0">
+    <div class="print" style="top:640px;width:896px;height:608px;margin-left:-448px"><div class="ph"><img src="../assets/fotos/gala.jpg"></div></div>
+    <div class="cap italic" style="top:1300px" data-fade="22.0">Con alma de alta costura.</div>
+  </section>
+
+  <section class="page" data-at="24.6">
+    <div class="print" style="top:400px;width:792px;height:539px;margin-left:-396px"><div class="ph"><img src="../assets/fotos/alfileres.jpg"></div></div>
+    <div class="print" style="top:975px;width:792px;height:539px;margin-left:-396px" data-delay="0.5"><div class="ph"><img src="../assets/fotos/strapless.jpg"></div></div>
+    <div class="cap label" style="top:1555px" data-fade="25.8">Pieza por pieza</div>
+  </section>
+
+  <section class="page" data-at="28.2">
+    <div class="print" style="top:470px;width:632px;height:782px;margin-left:-316px"><div class="ph"><img src="../assets/fotos/falda.jpg"></div></div>
+    <div class="cap italic" style="top:1300px" data-fade="29.2">Algo hecho para ti.</div>
+  </section>
+
+  <!-- Cierre -->
+  <section class="page" data-at="31.8">
+    <div class="cap word" id="end-word" style="top:800px;font-size:150px">OMMA</div>
+    <div id="end-rule" style="position:absolute;left:540px;top:995px;height:2px;background:var(--brand-cafe)"></div>
+    <div class="cap label" style="top:1030px;font-size:26px;letter-spacing:.34em;color:var(--brand-cafe)" data-fade="33.6">Viste tu esencia</div>
+    <div class="cap" style="top:1360px;font-family:var(--font-sans);font-weight:300;font-size:36px;letter-spacing:.06em;color:var(--brand-espresso)" data-fade="34.6">@omma_boutique</div>
+    <div class="cap label" style="top:1420px;font-size:19px;color:var(--topo)" data-fade="35.0">Hecho a mano · Envíos a toda Colombia</div>
+  </section>
+
+  <div id="vignette"></div>
+  <div id="folio"><div class="l">OMMA</div><div class="r">Viste tu esencia</div></div>
+  <canvas id="grain" width="360" height="640"></canvas>
+</div>
+
+<script>
+const DURATION = 40, FPS = 30, XFADE = 1.1;
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const out4 = x => 1 - Math.pow(1 - x, 4);
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+const pages = $$('.page').map(el => ({ el, at: +el.dataset.at }));
+pages.forEach((p, i) => { p.next = pages[i + 1] ? pages[i + 1].at : 99; });
+
+function render(t) {
+  for (const p of pages) {
+    // la página nueva se funde sobre la anterior; la anterior se oculta cuando queda cubierta
+    const vis = t >= p.at && t < p.next + XFADE;
+    p.el.style.display = vis ? 'block' : 'none';
+    if (!vis) continue;
+    p.el.style.opacity = p.at === 0 ? 1 : inOut(prog(t, p.at, p.at + XFADE));
+    // el contenido que sale se retira antes de que llegue la página siguiente: nunca dos fotos ni dos textos encimados
+    const leave = 1 - inOut(prog(t, p.next - 0.5, p.next + 0.3));
+    for (const pr of p.el.querySelectorAll('.print')) {
+      const s = p.at + 0.15 + (+pr.dataset.delay || 0);
+      const e = out4(prog(t, s, s + 1.8));
+      pr.style.opacity = e * leave;
+      pr.style.transform = `translateY(${(1 - e) * 16}px)`;
+      // movimiento lento dentro de la foto: un acercamiento apenas perceptible
+      pr.querySelector('img').style.transform = `scale(${1.02 + 0.05 * prog(t, p.at, p.next + XFADE)})`;
+    }
+    for (const c of p.el.querySelectorAll('[data-fade]')) {
+      const a = +c.dataset.fade, e = out4(prog(t, a, a + 1.2));
+      c.style.opacity = e * leave;
+      c.style.transform = `translateY(${(1 - e) * 10}px)`;
+    }
+  }
+
+  // portada: la textura respira, el logotipo cierra su espaciado
+  $('#title-bg').style.transform = `scale(${1.04 + 0.05 * prog(t, 0, 4.1)})`;
+  const k = out4(prog(t, 0.3, 2.6)), w = $('#title-word'), ls = 0.42 - 0.28 * k;
+  w.style.opacity = k * (1 - inOut(prog(t, 2.5, 3.3))); w.style.letterSpacing = ls + 'em'; w.style.paddingLeft = ls + 'em';
+
+  // cierre
+  const k2 = out4(prog(t, 32.3, 34.6)), w2 = $('#end-word'), ls2 = 0.42 - 0.28 * k2;
+  w2.style.opacity = k2; w2.style.letterSpacing = ls2 + 'em'; w2.style.paddingLeft = ls2 + 'em';
+  const rw = 300 * inOut(prog(t, 33.2, 34.4)), r = $('#end-rule');
+  r.style.width = rw + 'px'; r.style.marginLeft = -rw / 2 + 'px';
+
+  // folio editorial: solo en las páginas de la serie, nunca encima de la foto grande
+  const f = out4(prog(t, 3.2, 4.4)) * (1 - inOut(prog(t, 17.2, 17.9)) + inOut(prog(t, 21.0, 21.8))) * (1 - inOut(prog(t, 31.6, 32.3)));
+  $('#folio').style.opacity = clamp(f);
+
+  grain(Math.round(t * FPS));
+}
+
+// Grano de película determinista
+const gc = $('#grain'), gx = gc.getContext('2d'), gimg = gx.createImageData(360, 640);
+function grain(frame) {
+  let s = (frame * 9301 + 49297) % 233280 || 1;
+  const d = gimg.data;
+  for (let i = 0; i < d.length; i += 4) {
+    s = (s * 16807) % 2147483647;
+    const v = 128 + ((s & 255) - 128) * 0.9;
+    d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255;
+  }
+  gx.putImageData(gimg, 0, 0);
+}
+
+window.render = render;
+window.DURATION = DURATION; window.FPS = FPS;
+const images = Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
+window.ready = Promise.all([document.fonts.ready, images]).then(() => { render(0); return true; });
+
+const qs = new URLSearchParams(location.search);
+if (qs.has('t')) window.ready.then(() => render(parseFloat(qs.get('t'))));
+else if (qs.has('play')) window.ready.then(() => { const t0 = performance.now(); (function loop() { render(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); })(); });
+</script>
+</body>
+</html>

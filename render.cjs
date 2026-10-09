@@ -1,14 +1,16 @@
 // Renderiza src/omma-lanzamiento.html cuadro a cuadro y lo codifica con ffmpeg.
-//   node render.cjs                 → out/omma-lanzamiento-9x16.mp4
-//   node render.cjs --stills 1,6,12 → out/stills/t-<seg>.png (revisión)
+//   node render.cjs                                  → out/omma-serie-9x16.mp4
+//   node render.cjs --src src/omma-lanzamiento.html --out out/omma-lanzamiento-9x16.mp4 --audio out/musica.wav
+//   node render.cjs --stills 1,6,12                  → out/stills/t-<seg>.png (revisión)
 const { chromium } = require('playwright');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
-const SRC = 'file://' + path.join(__dirname, 'src', 'omma-lanzamiento.html');
 const args = process.argv.slice(2);
-const stillsArg = args.includes('--stills') ? args[args.indexOf('--stills') + 1] : null;
+const opt = (name, def) => args.includes(name) ? args[args.indexOf(name) + 1] : def;
+const SRC = 'file://' + path.resolve(__dirname, opt('--src', 'src/omma-serie.html'));
+const stillsArg = opt('--stills', null);
 
 (async () => {
   const browser = await chromium.launch();
@@ -29,9 +31,9 @@ const stillsArg = args.includes('--stills') ? args[args.indexOf('--stills') + 1]
 
   const { DURATION, FPS } = await page.evaluate(() => ({ DURATION: window.DURATION, FPS: window.FPS }));
   const total = Math.round(DURATION * FPS);
-  const outFile = path.join(__dirname, 'out', 'omma-lanzamiento-9x16.mp4');
-  // la música (tools/musica.py → out/musica.wav) se mezcla si existe, normalizada a -14 LUFS
-  const music = path.join(__dirname, 'out', 'musica.wav');
+  const outFile = path.resolve(__dirname, opt('--out', 'out/omma-serie-9x16.mp4'));
+  // la música (tools/musica.py) se mezcla si existe, normalizada a -14 LUFS
+  const music = path.resolve(__dirname, opt('--audio', 'out/musica-serie.wav'));
   const audio = fs.existsSync(music)
     ? ['-i', music, '-map', '0:v', '-map', '1:a', '-af', 'loudnorm=I=-14:TP=-1.5:LRA=11', '-ar', '48000', '-c:a', 'aac', '-b:a', '192k', '-shortest']
     : [];

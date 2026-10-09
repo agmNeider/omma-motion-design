@@ -1,11 +1,12 @@
 """Banda sonora original para el video de lanzamiento de OMMA.
 
-Piano + colchón de cuerdas en re mayor, sintetizados aquí mismo (sin
-muestras ni licencias de terceros). Pulso de 1,1 s (54,5 BPM), alineado con
-los cortes del video; los acentos de diseño sonoro caen en los tiempos
-exactos de las transiciones.
+Piano solo y colchón suave en re mayor, sintetizados aquí mismo (sin
+muestras ni licencias de terceros). Un acorde por página de la serie de
+fotos, a 66,7 BPM, con un roce de papel al pasar cada página.
 
-    python3 tools/musica.py out/musica.wav
+    python3 tools/musica.py out/musica-serie.wav
+
+(La música de la primera versión del video está en el historial de git.)
 """
 import sys
 import wave
@@ -15,8 +16,6 @@ import numpy as np
 SR = 48000
 DURATION = 40.0
 N = int(SR * DURATION)
-BEAT = 1.1           # un corte de palabra = un tiempo
-EIGHTH = BEAT / 2
 rng = np.random.default_rng(7)
 
 music = np.zeros((2, N), np.float32)   # bus con reverberación
@@ -130,74 +129,55 @@ def reverb(sig, seconds=3.2, mix=0.38):
     return out
 
 
-# ---- Armonía: un acorde por capítulo -------------------------------------------
-DMAJ9 = [50, 57, 61, 64, 66, 69, 73, 76]
-BM11 = [47, 54, 57, 62, 64, 66, 69, 74]
-GMAJ7 = [43, 50, 54, 59, 61, 66, 71, 74]
-ASUS = [45, 52, 59, 62, 64, 66, 71, 76]
-EM9 = [40, 47, 50, 54, 55, 59, 62, 66]
-A6 = [45, 52, 57, 61, 64, 66, 69, 73]
-BM9 = [47, 54, 57, 61, 62, 66, 69, 73]
-ARP = [0, 3, 5, 6, 4, 7, 5, 3]          # orden del arpegio en corcheas
+# ---- Partitura: un acorde por página de la serie ----------------------------------
+# Piano solo y lento, con colchón muy suave. Las páginas cambian en estos tiempos:
+PAGES = [0.0, 3.0, 6.6, 10.2, 13.8, 17.4, 21.0, 24.6, 28.2, 31.8]
+BEAT = 0.9   # 66,7 BPM: cuatro tiempos por página
+#            acorde (graves → agudos)          melodía (tiempo dentro de la página, nota)
+SCORE = [
+    ([50, 57, 64, 66, 69],                    [(0.9, 76), (2.0, 74)]),              # Re maj9 · portada
+    ([47, 54, 62, 66, 69],                    [(0.9, 78), (2.7, 76)]),              # Si m11 · encaje
+    ([43, 50, 59, 62, 66],                    [(0.9, 74), (2.7, 71)]),              # Sol maj7 · mano
+    ([45, 52, 59, 61, 64],                    [(0.9, 73), (1.8, 76), (2.7, 71)]),   # La add9 · taller
+    ([42, 50, 57, 61, 64],                    [(0.9, 69), (2.7, 73)]),              # Re/Fa# · boceto
+    ([40, 47, 55, 59, 62, 66],                [(1.8, 78)]),                         # Mi m9 · vestido (respiro)
+    ([43, 50, 59, 61, 66],                    [(0.9, 74), (2.7, 76)]),              # Sol maj7(#11) · alta costura
+    ([45, 52, 57, 62, 64],                    [(0.9, 71), (2.7, 73)]),              # La sus · pieza por pieza
+    ([47, 54, 61, 62, 66],                    [(0.9, 73), (2.7, 69)]),              # Si m9 · hecho para ti
+    ([38, 50, 57, 61, 64, 69],                [(1.2, 78), (2.4, 81), (3.6, 85)]),   # Re maj9 · OMMA
+]
 
-# 0–4,6 s · el hilo: colchón que se abre y notas sueltas
-add(pad([50, 57, 64, 66, 73], 4.6, attack=3.0), 0.0, gain=0.9)
-for t, m, v, p in [(0.35, 69, .45, .2), (1.45, 78, .35, -.2), (2.55, 76, .38, .25), (3.65, 73, .42, -.1)]:
-    add(piano(m, v), t, pan=p)
 
-# 4,6–22,2 s · bocetos, oficio, diseño: cuatro acordes de 4,4 s
-for c, chord in enumerate([DMAJ9, BM11, GMAJ7, ASUS]):
-    t0 = 4.6 + c * 4.4
-    add(pad(chord[1:6], 4.4, attack=1.2), t0, gain=0.8)
-    add(bass(chord[0] - 12, 4.4), t0, bus=dry)
-    for i in range(8):
-        idx = ARP[i]
-        v = 0.55 if i == 0 else 0.38 + 0.08 * rng.random()
-        add(piano(chord[idx], v), t0 + i * EIGHTH, pan=(idx - 3.5) / 7)
-    add(piano(chord[-1] + 12, 0.3), t0 + 0.02, pan=0.3)   # campanita aguda al cambiar de acorde
+def paper(gain=1.0):
+    """Roce de papel al pasar la página: ruido suave, apenas audible."""
+    return whoosh(0.45, peak=.35, fmax=3500, gain=0.28 * gain)
 
-# 22,2–26,6 s · proceso: pulso en cada corte, tensión que sube
-for c, chord in enumerate([EM9, EM9, A6, A6]):
-    t0 = 22.2 + c * BEAT
-    add(thump(0.9), t0, bus=dry)
-    add(piano(chord[0] + 12, .6) + piano(chord[3], .5) + piano(chord[5], .5), t0)
-    for i in range(1, 2):
-        add(piano(chord[ARP[(c * 2 + i) % 8]], .4), t0 + i * EIGHTH, pan=.2)
-    add(bass(chord[0] - 12, BEAT), t0, bus=dry)
-add(pad(EM9[2:7], 2.2, attack=.6), 22.2, gain=0.8)
-add(pad(A6[2:7], 2.3, attack=.6, cutoff=2200), 24.4, gain=0.95)
-add(whoosh(2.4, peak=.92, fmax=7000, gain=.8), 24.3)
 
-# 26,6–32,2 s · «Hecho para ti»: respiro, solo colchón y notas largas
-add(pad(BM9[1:7], 5.6, attack=1.0), 26.6, gain=0.75)
-add(bass(BM9[0] - 12, 5.6), 26.6, bus=dry, gain=0.7)
-for t, m, v in [(27.7, 78, .4), (28.8, 76, .35), (29.9, 73, .38), (31.0, 74, .33)]:
-    add(piano(m, v), t, pan=.15)
-
-# 32,2–40 s · firma: resolución en re mayor
-add(whoosh(1.4, peak=.85, fmax=6000, gain=.9), 31.0)
-add(thump(1.3, f0=70, f1=32, decay=1.4), 32.25, bus=dry)
-for m, v in [(38, .7), (50, .6), (57, .5), (61, .45), (64, .45), (69, .4)]:
-    add(piano(m, v, dur=7.0), 32.25, pan=(m - 55) / 40)
-add(pad([50, 57, 61, 64, 69, 73], 5.0, attack=1.4, release=2.5), 32.2, gain=1.0)
-add(bass(38, 6.0), 32.2, bus=dry)
-for t, m in [(34.9, 81), (35.2, 85), (35.5, 88)]:          # destello al asentarse el logotipo
-    add(piano(m, .32), t, pan=.35)
-
-# Transiciones: aire suave en cada cambio de escena
-for t in (4.4, 11.2, 16.1, 26.5):
-    add(whoosh(1.0, peak=.55, gain=.55), t)
+for i, (chord, melody) in enumerate(SCORE):
+    t0 = PAGES[i]
+    dur = (PAGES[i + 1] if i + 1 < len(PAGES) else DURATION) - t0
+    last = i == len(SCORE) - 1
+    # acorde arpegiado muy despacio, como tocado a mano
+    for j, m in enumerate(chord):
+        v = (0.42 if j == 0 else 0.30) * (1.15 if last else 1)
+        add(piano(m, v, dur=7.0 if last else 5.0), t0 + 0.06 * j, pan=(m - 57) / 40)
+    for dt, m in melody:
+        add(piano(m, 0.33 if not last else 0.28), t0 + dt, pan=0.15)
+    add(pad(chord[1:], dur, attack=1.6, release=2.8, cutoff=1100), t0, gain=0.55)
+    add(bass(chord[0] - 12, dur), t0, bus=dry, gain=0.55)
+    if i > 0:
+        add(paper(), t0 - 0.15, pan=-0.2)
 
 # ---- Mezcla ---------------------------------------------------------------------
 mix = reverb(music) + dry
 mix -= mix.mean(axis=1, keepdims=True)
 fade = np.ones(N, np.float32)
-fade[int(SR * 37.5):] = np.linspace(1, 0, N - int(SR * 37.5)) ** 1.5
+fade[int(SR * 37.0):] = np.linspace(1, 0, N - int(SR * 37.0)) ** 1.5
 fade[: int(SR * .05)] = np.linspace(0, 1, int(SR * .05))
 mix *= fade
 mix = np.tanh(1.2 * mix / np.max(np.abs(mix))) / np.tanh(1.2) * 0.89
 
-out = sys.argv[1] if len(sys.argv) > 1 else 'out/musica.wav'
+out = sys.argv[1] if len(sys.argv) > 1 else 'out/musica-serie.wav'
 with wave.open(out, 'wb') as w:
     w.setnchannels(2)
     w.setsampwidth(2)
