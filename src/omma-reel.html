@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>OMMA · Reel</title>
+<!-- Capa transparente sobre out/reel-base.mp4: textos y tarjeta de cierre.
+     Vista previa con el video debajo: ?play&base=../out/reel-base.mp4 -->
+<style>
+@font-face { font-family: "Cormorant Garamond"; font-style: normal; font-weight: 300 700; src: url(../fonts/cormorant.woff2) format("woff2"); }
+@font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 300 700; src: url(../fonts/cormorant-italic.woff2) format("woff2"); }
+@font-face { font-family: "Jost"; font-style: normal; font-weight: 100 900; src: url(../fonts/jost.woff2) format("woff2"); }
+:root {
+  --brand-crema: #efe6d8; --brand-cafe: #6d3914; --brand-espresso: #4c2b08; --topo: #6f5a44;
+  --font-display: "Cormorant Garamond", Georgia, serif; --font-sans: Jost, "Century Gothic", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: transparent; }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: transparent; }
+#base { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
+/* velo crema arriba: da lectura a los textos sin tapar el plano */
+#veil { position: absolute; left: 0; right: 0; top: 0; height: 620px; background: linear-gradient(rgba(239,230,216,.88) 0%, rgba(239,230,216,.72) 38%, rgba(239,230,216,0) 100%); }
+.phrase { position: absolute; left: 0; right: 0; top: 268px; text-align: center; font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 70px; line-height: 1.15; color: var(--brand-espresso); }
+#end { position: absolute; inset: 0; background: var(--brand-crema); }
+.cap { position: absolute; left: 0; right: 0; text-align: center; }
+.label { font-family: var(--font-sans); font-weight: 500; letter-spacing: .3em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <video id="base" muted playsinline></video>
+  <div id="veil"></div>
+  <!-- un texto por plano: [entra, sale] en segundos, alineados a los cortes -->
+  <div class="phrase" data-span="0.15 2.7">Puntada a puntada.</div>
+  <div class="phrase" data-span="3.15 5.1">Hilo por hilo.</div>
+  <div class="phrase" data-span="5.55 7.5">Cada detalle,</div>
+  <div class="phrase" data-span="7.95 10.5">pensado para ti.</div>
+  <div class="phrase" data-span="10.95 13.3">Con alma de alta costura.</div>
+
+  <div id="end">
+    <div class="cap" id="end-word" style="top:800px;font-family:var(--font-display);font-weight:500;font-size:150px;line-height:1;color:var(--brand-espresso)">OMMA</div>
+    <div id="end-rule" style="position:absolute;left:540px;top:995px;height:2px;background:var(--brand-cafe)"></div>
+    <div class="cap label" style="top:1030px;font-size:26px;letter-spacing:.34em;color:var(--brand-cafe)" data-fade="15.4">Viste tu esencia</div>
+    <div class="cap" style="top:1300px;font-family:var(--font-sans);font-weight:300;font-size:38px;letter-spacing:.06em;color:var(--brand-espresso)" data-fade="16.2">@omma_boutique</div>
+    <div class="cap label" style="top:1362px;font-size:19px;color:var(--topo)" data-fade="16.5">Hecho a mano · Envíos a toda Colombia</div>
+  </div>
+</div>
+<script>
+const DURATION = 19.2, FPS = 30;
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const inOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const out4 = x => 1 - Math.pow(1 - x, 4);
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+
+function render(t) {
+  for (const el of $$('.phrase')) {
+    const [a, b] = el.dataset.span.split(' ').map(Number);
+    const i = out4(prog(t, a, a + 0.6)), o = inOut(prog(t, b - 0.3, b));
+    el.style.opacity = i * (1 - o);
+    el.style.transform = `translateY(${(1 - i) * 14}px)`;
+  }
+  const clips = 1 - inOut(prog(t, 13.3, 13.8));
+  $('#veil').style.opacity = clips;
+
+  // cierre: crema que cubre el último plano y el logotipo que cierra su espaciado
+  const e = $('#end');
+  e.style.opacity = inOut(prog(t, 13.3, 13.8));
+  e.style.display = t >= 13.3 ? 'block' : 'none';
+  const k = out4(prog(t, 13.9, 16.0)), w = $('#end-word'), ls = 0.42 - 0.28 * k;
+  w.style.opacity = k; w.style.letterSpacing = ls + 'em'; w.style.paddingLeft = ls + 'em';
+  const rw = 300 * inOut(prog(t, 14.9, 16.0)), r = $('#end-rule');
+  r.style.width = rw + 'px'; r.style.marginLeft = -rw / 2 + 'px';
+  for (const c of $$('[data-fade]')) {
+    const a = +c.dataset.fade, x = out4(prog(t, a, a + 1.2));
+    c.style.opacity = x; c.style.transform = `translateY(${(1 - x) * 10}px)`;
+  }
+}
+
+window.render = render; window.DURATION = DURATION; window.FPS = FPS; window.TRANSPARENT = true;
+window.ready = document.fonts.ready.then(() => { render(0); return true; });
+
+const qs = new URLSearchParams(location.search);
+if (qs.has('base')) { const v = $('#base'); v.src = qs.get('base'); v.style.display = 'block'; }
+if (qs.has('t')) window.ready.then(() => render(parseFloat(qs.get('t'))));
+else if (qs.has('play')) window.ready.then(() => {
+  const v = $('#base'); if (qs.has('base')) v.play();
+  const t0 = performance.now();
+  (function loop() { const t = qs.has('base') ? v.currentTime : ((performance.now() - t0) / 1000) % DURATION; render(t); requestAnimationFrame(loop); })();
+});
+</script>
+</body>
+</html>

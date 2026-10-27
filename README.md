@@ -4,21 +4,30 @@ Videos de presentación de marca para Reels e Historias (1080 × 1920, 30 fps, 4
 
 | Video | Composición | Concepto |
 |---|---|---|
-| `out/omma-serie-9x16.mp4` | `src/omma-serie.html` | **Versión actual.** Serie fotográfica: un libro de fotos que se hojea despacio. |
+| `out/omma-reel-9x16.mp4` | `src/omma-reel.html` sobre `out/reel-base.mp4` | **Reel del taller** (19 s): videos propios de la marca, cortes al pulso, textos breves y cierre de marca. |
+| `out/omma-serie-9x16.mp4` | `src/omma-serie.html` | Serie fotográfica: un libro de fotos que se hojea despacio. |
 | `out/omma-lanzamiento-9x16.mp4` | `src/omma-lanzamiento.html` | Primera versión: motion gráfico con hilo, molde y cortes de palabras. |
 
 ## Archivos
 
 - `src/*.html` — las animaciones. Todo su estado depende del tiempo `t`, así cada cuadro es exacto. Ábrelas con `?play` para verlas en tiempo real o con `?t=12.5` para congelar un instante.
 - `render.cjs` — las renderiza cuadro a cuadro con Playwright y las codifica con ffmpeg, mezclando la música normalizada a -14 LUFS.
+- `assets/videos/` — videos originales del taller de OMMA (máquina, hilo, botones, carretes).
+- `tools/reel_base.sh` — corta y revela los videos del taller y arma `out/reel-base.mp4`.
 - `assets/fotos/originales/` — fotos CC0 de StockSnap; autores y licencia en `assets/fotos/CREDITOS.md`.
 - `assets/fotos/*.jpg` — las mismas fotos reveladas y recortadas para la serie (`tools/fotos.py`).
 - `assets/originales/` — fotos de los bocetos de la marca; `assets/bocetos/` sus recortes en duotono (`tools/bocetos.py`).
 - `tools/buscar_fotos.py` — busca fotos CC0 en Openverse y arma hojas de contacto para elegir.
-- `tools/musica.py` — banda sonora original sintetizada en código, sin licencias de terceros.
+- `tools/sintesis.py` — instrumentos sintetizados (piano, colchón, bajo, aires) compartidos por las bandas sonoras.
+- `tools/musica.py`, `tools/musica_reel.py` — bandas sonoras originales de la serie y del reel, sin licencias de terceros.
 - `fonts/` — tipografías de la marca (Google Fonts, licencia OFL).
 
 ```bash
+# reel del taller
+bash tools/reel_base.sh out/reel-base.mp4
+python3 tools/musica_reel.py out/musica-reel.wav
+NODE_PATH=$(npm root -g) node render.cjs --src src/omma-reel.html --base out/reel-base.mp4 --audio out/musica-reel.wav --out out/omma-reel-9x16.mp4
+# serie fotográfica
 python3 tools/fotos.py assets/fotos/originales assets/originales assets/fotos
 python3 tools/musica.py out/musica-serie.wav
 NODE_PATH=$(npm root -g) node render.cjs                    # out/omma-serie-9x16.mp4
@@ -27,7 +36,24 @@ NODE_PATH=$(npm root -g) node render.cjs --stills 3,12,30  # fotogramas de revis
 NODE_PATH=$(npm root -g) node render.cjs --src src/omma-lanzamiento.html --out out/omma-lanzamiento-9x16.mp4 --audio out/musica.wav
 ```
 
-## Serie fotográfica (versión actual)
+## Reel del taller
+
+Hecho con los videos propios de la marca, sin imágenes de stock. 100 BPM: cada corte cae en un tiempo de la música.
+
+| Tiempo | Plano | Texto |
+|---|---|---|
+| 0–3 s | Máquina cosiendo lino a rayas, las manos guían la tela | *Puntada a puntada.* |
+| 3–5,4 s | Cono de hilo blanco, el hilo corre hacia la máquina | *Hilo por hilo.* |
+| 5,4–7,8 s | Botones que caen sobre la tela (cámara lenta a partir de 60 fps) | *Cada detalle,* |
+| 7,8–10,8 s | Carretes que llegan uno a uno (stop motion) | *pensado para ti.* |
+| 10,8–13,8 s | La máquina otra vez, de cerca | *Con alma de alta costura.* |
+| 13,8–19,2 s | Cierre en crema | OMMA · VISTE TU ESENCIA · @omma_boutique · HECHO A MANO · ENVÍOS A TODA COLOMBIA |
+
+- Revelado común (`tools/reel_base.sh`): menos saturación, tono cálido y negros levantados; los carretes neón llevan una desaturación extra para que no salgan de la paleta.
+- Los textos van arriba, sobre un velo crema degradado, dentro de la zona segura de Instagram y sin tapar el prensatelas.
+- Música (`tools/musica_reel.py`): piano en corcheas y colchón suave en re mayor, un acento grave muy leve en cada corte y resolución en el cierre.
+
+## Serie fotográfica
 
 Cada página es una copia impresa con borde marfil sobre papel crema, con la sombra única de la marca. La foto se acerca muy despacio dentro de su marco, las páginas se funden con una breve pausa en crema entre una y otra, y los textos son pies de foto.
 
